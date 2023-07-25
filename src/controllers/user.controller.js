@@ -169,30 +169,48 @@ getPasswordChangeMail = async (req, res) => {
 	let {email} = req.body                                      //Se obtiene el mail del body
     const existEmail = await userService.findUser({email})      //Validamos si el email ya está registrado en la DB
 	if (!existEmail) return res.status(400).send({status: "error", error: "Email not found"})   //Si el mail no se encuentra se retorna este mensaje
+    console.log(existEmail)
 
     //generar un jwt
-    generateToken(existEmail)
+    const user = {
+        first_name: existEmail.first_name,
+        last_name: existEmail.last_name,
+        email: existEmail.email
+    }
+    console.log(user)
+    const mailToken = generateToken(user)
 
     //Si el mail fue encontrado, se manda un email
 	let subject = "Cambio de contraseña, practica integradora"
-	let html = '<h1>Para cambiar password de vaya a la siguiente liga: </h1> <a href ="http://localhost:8080/changepassword">Cambiar mi password</a>'
-	
+	//let html = '<h1>Para cambiar password vaya a la siguiente liga: </h1> <a href ="http://localhost:8080/changepassword">Cambiar mi password</a>'
+	let html = `<form action="http://localhost:8080/changepassword/${mailToken}" method="PUT"> <button>Cambiar mi password</button>`
+
+
 	sendEmail(email, subject, html)
 	
 		res.status(200).send({
 			status: "success",
 			message: "email para cambio de password enviado"
+            
 		})
 	
 
 }
 
 //actualizar password
-uodatePassword = async (req, res) => {
+updatePassword = async (req, res) => {
 
-    console.log("EN UPDATE PASSWORD")
+    logger.info("EN UPDATE PASSWORD")
+    const usermail = req.user
+    //newpassword = req.body
+    console.log(usermail)
+    console.log(req.body)
 
+    //Ya tengo hasta aquí el correo del user y el nuevo passwor
 
+    //POR HACER: Agregar la logica para actualizar el password en la DB
+    //Validar si el password no es el mismo que ya tenia
+    
 }
 
 

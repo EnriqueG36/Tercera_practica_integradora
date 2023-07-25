@@ -4,6 +4,10 @@ const { Router } = require('express')
 const router = Router()
 const { auth } = require('../middlewares/authentication.middleware')
 
+//jwt
+const { authToken } = require('../utils/jwt')
+
+
  /*
 const ProductManager = require('../daos/mongo/product.mongo.js') //Importamos nuestro productManager hecho con la persistencia en mongo
 const productManager = new ProductManager()
@@ -13,6 +17,7 @@ const cartManager = new CartManager()
 */
 
 const ViewsController = require('../controllers/views.controller')
+
 
 const viewsController = new ViewsController()
 
@@ -42,12 +47,16 @@ router.get('/login', (req, res) => {
 
 //Contraseña olvidada
 router.get('/forgotpassword', (req, res) => {
+    
     res.render('forgotpassword', {})
 })
 
-//Cambio de contraseña
-router.get('/changepassword', (req, res)=> {
-    res.render('passwordchange', {})
+//Cambio de contraseña, debería de estar activo el token para continuar
+router.get('/changepassword/:token', authToken, (req, res)=> {
+    console.log("ubicaco en dodne renderiza la vista")
+    console.log(req.params)
+    const {token} = req.params
+    res.render('passwordchange', {token})
 })
 
 

@@ -45,7 +45,7 @@ router.get('/current', userController.getCurrentUserSessionData)
 router.post('/passwordchangemail', userController.getPasswordChangeMail) 
 
 //
-router.put('/updatepassword', authToken , userController.uodatePassword)
+router.post('/updatepassword/:token', authToken, userController.updatePassword)
 
 module.exports = router
 
