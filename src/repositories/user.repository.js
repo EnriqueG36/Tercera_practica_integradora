@@ -15,6 +15,9 @@ class UserRepository {
         return this.dao.findUser(email)
     }
 
+    updatePassword = async (email, password)=>{
+        return this.dao.updatePassword(email, password)
+    }
 
 }
 

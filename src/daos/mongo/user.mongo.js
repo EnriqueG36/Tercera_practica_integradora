@@ -5,7 +5,10 @@ const userModel = require('../model/user.model.js')         //Importamos el user
 const CartManager = require('./cart.mongo.js')      //Importamos el cartManager
 const cartManager = new CartManager()               //NUeva instancia de cart manager
 
+//Hasheo de password
 const { createHash, isValidPassword } = require('../../utils/utils.js') //Se usa para encriptar el password de un nuevo user
+//Logger
+const { logger } = require('../../config/logger.js')
 
 class UserManagerMongo {
 
@@ -41,17 +44,44 @@ class UserManagerMongo {
        async findUser(email){
        try{
 
-            console.log("en el find user del userManager")
-            console.log(email)
+            //console.log("en el find user del userManager")
+            //console.log(email)
 
             return userModel.findOne(email)
 
-        }catch(erro){
-            return new Error(err)
+        }catch(error){
+            return new Error(error)
         }
     }
 
+    //Actualizar un password de usuario
+    async updatePassword (email, password) {
+    
+        //buscamos al usuario por su mail y obtenemos su password
+        logger.info("DENTRO DE UPDATE USER PASSWORD")
+        logger.info(email)
+        const userInDb = await userModel.findOne({email: email})
+        const oldPassword = userInDb.password
+        console.log(userInDb)
+        logger.info(oldPassword)
 
+
+        console.log("A PUNTO DE COMPARAR LOS PASSWORDS")
+        console.log(isValidPassword(userInDb, password))
+        if(isValidPassword(userInDb, password)) return {status: "error", message: "Eliga otro password, diferente al anterior"}
+    
+        logger.info("Despues del if")
+        const actualNewPassword = createHash(password)   
+        logger.info(oldPassword)    
+        logger.info(actualNewPassword)    
+        const actualizado = await userModel.findOneAndUpdate({email: email}, {password: actualNewPassword},{new: true})
+        logger.info(actualizado)
+        return {status: "success", message: "Password ha sido actualizado"}
+
+        
+
+        
+    }
 }
 
 module.exports = UserManagerMongo                           //Exportamos nuestra clase userManagerMongo

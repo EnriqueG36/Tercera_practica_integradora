@@ -202,14 +202,15 @@ updatePassword = async (req, res) => {
 
     logger.info("EN UPDATE PASSWORD")
     const usermail = req.user
-    //newpassword = req.body
-    console.log(usermail)
-    console.log(req.body)
+    const newpassword = req.body.password
+    logger.info(usermail)
+    logger.info(newpassword)
+     
+    const result = await userService.updatePassword(usermail, newpassword)
 
-    //Ya tengo hasta aquí el correo del user y el nuevo passwor
+       console.log("ya se lo brincó")
 
-    //POR HACER: Agregar la logica para actualizar el password en la DB
-    //Validar si el password no es el mismo que ya tenia
+       res.send(result)
     
 }
 
