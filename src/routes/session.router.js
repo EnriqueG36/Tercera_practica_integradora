@@ -41,11 +41,14 @@ router.get('/logout', userController.getUserLogout)
 //Enpoint current, devuelve el usuario actual
 router.get('/current', userController.getCurrentUserSessionData)
 
-//Cambio de password
+//Enviar mail para cambio de password
 router.post('/passwordchangemail', userController.getPasswordChangeMail) 
 
-//
+//Cambio de password
 router.post('/updatepassword/:token', authToken, userController.updatePassword)
+
+//Cambiar usuario de user a premium y viceversa
+router.put('/premium/:uid', userController.changeUserRoleById)
 
 module.exports = router
 

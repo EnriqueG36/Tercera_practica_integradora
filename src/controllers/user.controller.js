@@ -214,6 +214,15 @@ updatePassword = async (req, res) => {
     
 }
 
+//Cambiar role, de user a premium y viceversa
+changeUserRoleById = async (req, res) => {
+    
+    const {uid} =req.params
+    const updatedUser = await userService.changeUserRoleById(uid)
+
+    res.send(updatedUser)
+}
+
 
 }
 

@@ -19,12 +19,16 @@ const authToken = (req, res, next) => {
     //Recibimos el token mediante req.params
     const {token} = req.params
 
-    if(!token) return res.status(401).send({status: "error", message: "No se encontró el jason web token"})
-
+    if(!token) {
+        logger.error("No se encuentra el token")
+        
+        return res.status(401).send({status: "error", message: "No se encontró el jason web token"})
+    }
     logger.info(token)
     
     jwt.verify(token, PRIVATE_KEY, (error, credentials)=>{
-        if(error) return res.status(403).send({error: "Not authorized (El token ha expirado)"})
+        if(error) res.redirect('/resendtoken')
+        //return res.status(403).send({error: "Not authorized (El token ha expirado)"})
         const userEmail  = credentials.email
         req.user = userEmail
         logger.info(req.user)

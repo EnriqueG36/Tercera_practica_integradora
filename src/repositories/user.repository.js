@@ -19,6 +19,10 @@ class UserRepository {
         return this.dao.updatePassword(email, password)
     }
 
+    changeUserRoleById = async (uid)=>{
+        return this.dao.changeUserRoleById(uid)
+    }
+
 }
 
 module.exports = UserRepository

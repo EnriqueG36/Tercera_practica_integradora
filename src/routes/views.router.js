@@ -59,5 +59,10 @@ router.get('/changepassword/:token', authToken, (req, res)=> {
     res.render('passwordchange', {token})
 })
 
+//Si el token expiro, redirigir a ésta vista
+router.get('/resendtoken', (req, res) => {
+
+    res.render('resendtoken', {})
+})
 
 module.exports = router

@@ -77,11 +77,29 @@ class UserManagerMongo {
         const actualizado = await userModel.findOneAndUpdate({email: email}, {password: actualNewPassword},{new: true})
         logger.info(actualizado)
         return {status: "success", message: "Password ha sido actualizado"}
-
-        
-
         
     }
+
+    async changeUserRoleById (uid) {
+
+        //Buscar el usuario en la DB por su uid
+        let userInDb = await userModel.findOne({_id: uid})
+
+        let updatedUser
+
+        if (userInDb.role == "user"){ 
+            updatedUser = await userModel.findOneAndUpdate({_id: uid}, {role: "premium"},{new: true})
+        }
+        if (userInDb.role == "premium"){
+            updatedUser =  await userModel.findOneAndUpdate({_id: uid}, {role: "user"},{new: true})
+        }
+
+        logger.info(updatedUser)
+
+        return updatedUser
+
+    }   
+
 }
 
 module.exports = UserManagerMongo                           //Exportamos nuestra clase userManagerMongo
